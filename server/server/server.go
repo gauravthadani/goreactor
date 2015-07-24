@@ -127,19 +127,15 @@ func logRequestData(r *http.Request, title string) {
 func GetData(w http.ResponseWriter, r *http.Request, title string) {
 	r.ParseForm()
 	
+	logRequestData(r, title)
+	
+	
+
 	body, err := ioutil.ReadFile("data.json")
     
     if err != nil {
     	log.Println(">>> Oops, Error in GetData", err)    
     }
-	
-	logRequestData(r, title)
-	direction, ok := r.Form["direction"]
-	column_name, _ := r.Form["col_name"]
-	if ok {
-		log.Println(">>> Sort direction", direction[0])
-		log.Println(">>> Sort column", column_name[0])
-	}
     
     var v Data
 
@@ -151,7 +147,13 @@ func GetData(w http.ResponseWriter, r *http.Request, title string) {
     for _, item := range v.Items {
     	log.Println(item)
     }
-    
+	
+	direction, ok := r.Form["direction"]
+	column_name, _ := r.Form["col_name"]
+	if ok {
+		log.Println(">>> Sort direction", direction[0])
+		log.Println(">>> Sort column", column_name[0])
+	}    
     v.Paginate.Direction = direction[0]
     v.Paginate.ColName = column_name[0]
     
@@ -171,7 +173,9 @@ func main() {
 		port = "3001"
 	}
 	
-	http.Handle("/", http.FileServer(http.Dir("./public")))
+	log.Println(http.Dir("../../..//public"))
+
+	http.Handle("/", http.FileServer(http.Dir("../..//public")))
 	http.HandleFunc("/GetData", makeHandler(GetData))
 	log.Println("Server started: http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
