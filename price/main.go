@@ -9,49 +9,6 @@ import (
 )
 
 var path = ""
-var (
-	ComparisonMap = map[string]structs.ComparisonFunc{
-		"Name": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Name < j.Name
-		}),
-
-		"Picture": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Picture < j.Picture
-		}),
-
-		"Years": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Years < j.Years
-		}),
-
-		"Birthday": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Birthday < j.Birthday
-		}),
-
-		"Num": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Num < j.Num
-		}),
-
-		"Height": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Height < j.Height
-		}),
-
-		"Weight": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Weight < j.Weight
-		}),
-
-		"Pos": structs.ComparisonFunc(func(i, j *structs.Item) bool {
-			return i.Pos < j.Pos
-		}),
-	}
-)
-
-
-func OrderBy(fn structs.ComparisonFunc, isAscending bool) *structs.CompareBy {
-	var c structs.CompareBy
-	c.IsLessThan = fn
-	c.IsAscending = isAscending
-	return &c
-}
 
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
@@ -100,7 +57,8 @@ func GetData(w http.ResponseWriter, r *http.Request, title string) {
 	v.Paginate.Direction = direction[0]
 	v.Paginate.ColName = column_name[0]
 
-	OrderBy(ComparisonMap[column_name[0]], direction[0] == "asc").Sort(v.Items)
+	structs.OrderBy(column_name[0], direction[0] == "asc").Sort(v.Items)
+
 
 	newBody, err := json.Marshal(v)
 	if err != nil {
@@ -109,6 +67,8 @@ func GetData(w http.ResponseWriter, r *http.Request, title string) {
 
 	w.Write(newBody)
 }
+
+
 
 func main() {
 	port := os.Getenv("PORT")

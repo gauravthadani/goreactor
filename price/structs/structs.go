@@ -58,3 +58,49 @@ func (a *CompareBy) Less(i, j int) bool {
 	b := []Item(a.Items)
 	return a.IsAscending != a.IsLessThan(&b[i], &b[j])
 }
+
+var (
+	ComparisonMap = map[string]ComparisonFunc{
+		"Name": ComparisonFunc(func(i, j *Item) bool {
+			return i.Name < j.Name
+		}),
+
+		"Picture": ComparisonFunc(func(i, j *Item) bool {
+			return i.Picture < j.Picture
+		}),
+
+		"Years": ComparisonFunc(func(i, j *Item) bool {
+			return i.Years < j.Years
+		}),
+
+		"Birthday": ComparisonFunc(func(i, j *Item) bool {
+			return i.Birthday < j.Birthday
+		}),
+
+		"Num": ComparisonFunc(func(i, j *Item) bool {
+			return i.Num < j.Num
+		}),
+
+		"Height": ComparisonFunc(func(i, j *Item) bool {
+			return i.Height < j.Height
+		}),
+
+		"Weight": ComparisonFunc(func(i, j *Item) bool {
+			return i.Weight < j.Weight
+		}),
+
+		"Pos": ComparisonFunc(func(i, j *Item) bool {
+			return i.Pos < j.Pos
+		}),
+	}
+)
+
+func OrderBy(name string, isAscending bool) *CompareBy {
+	var c CompareBy
+	c.IsLessThan = ComparisonMap[name]
+	c.IsAscending = isAscending
+	return &c
+}
+
+
+
