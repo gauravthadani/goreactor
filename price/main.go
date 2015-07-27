@@ -5,50 +5,49 @@ import (
 	"log"
 	"net/http"
 	"os"
-	. "price/structs"
-
+    "github.com/user/price/structs"
 )
 
-
+var path = ""
 var (
-	ComparisonMap = map[string]ComparisonFunc{
-		"Name": ComparisonFunc(func(i, j *Item) bool {
+	ComparisonMap = map[string]structs.ComparisonFunc{
+		"Name": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Name < j.Name
 		}),
 
-		"Picture": ComparisonFunc(func(i, j *Item) bool {
+		"Picture": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Picture < j.Picture
 		}),
 
-		"Years": ComparisonFunc(func(i, j *Item) bool {
+		"Years": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Years < j.Years
 		}),
 
-		"Birthday": ComparisonFunc(func(i, j *Item) bool {
+		"Birthday": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Birthday < j.Birthday
 		}),
 
-		"Num": ComparisonFunc(func(i, j *Item) bool {
+		"Num": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Num < j.Num
 		}),
 
-		"Height": ComparisonFunc(func(i, j *Item) bool {
+		"Height": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Height < j.Height
 		}),
 
-		"Weight": ComparisonFunc(func(i, j *Item) bool {
+		"Weight": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Weight < j.Weight
 		}),
 
-		"Pos": ComparisonFunc(func(i, j *Item) bool {
+		"Pos": structs.ComparisonFunc(func(i, j *structs.Item) bool {
 			return i.Pos < j.Pos
 		}),
 	}
 )
 
 
-func OrderBy(fn ComparisonFunc, isAscending bool) *CompareBy {
-	var c CompareBy
+func OrderBy(fn structs.ComparisonFunc, isAscending bool) *structs.CompareBy {
+	var c structs.CompareBy
 	c.IsLessThan = fn
 	c.IsAscending = isAscending
 	return &c
@@ -75,13 +74,13 @@ func GetData(w http.ResponseWriter, r *http.Request, title string) {
 
 	logRequestData(r, title)
 
-	body, err := ioutil.ReadFile("data.json")
+	body, err := ioutil.ReadFile(path+"\\data.json")
 
 	if err != nil {
 		log.Println(">>> Oops, Error in GetData", err)
 	}
 
-	var v Data
+	var v structs.Data
 
 	err = json.Unmarshal([]byte(body), &v)
 	if err != nil {
@@ -116,9 +115,8 @@ func main() {
 	if port == "" {
 		port = "3001"
 	}
-
-
-	http.Handle("/", http.FileServer(http.Dir(".//public")))
+	path = os.Getenv("GOPATH")+"\\src\\github.com\\user\\price"
+	http.Handle("/", http.FileServer(http.Dir(path+"\\public")))
 	http.HandleFunc("/GetData", makeHandler(GetData))
 	log.Println("Server started: http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

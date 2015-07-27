@@ -38,7 +38,6 @@ type CompareBy struct {
 	IsAscending bool
 }
 
-
 type ComparisonFunc func(i, j *Item) bool
 
 type Items []Item
