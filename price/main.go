@@ -1,4 +1,5 @@
 package main
+
 import (
 	"log"
 	"net/http"
@@ -8,24 +9,35 @@ import (
 
 
 
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string), data_file_path string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fn(w, r, "GetData")
+		fn(w, r, data_file_path)
 	}
 }
 
-
-
-
+type AppConfig struct{
+	Port string `json:"port"`
+	PublicFolderPath string `json:"public_folder_path"`
+	DataFilePath string `json:"data_file_path"`
+}
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3001"
+	config_path := os.Getenv("PRICE_CONFIG_FILE_PATH")
+	var conf AppConfig
+
+	err := queryengine.ReadJson(config_path, &conf)
+	
+	if err != nil {
+		log.Fatal(">>>> Main app failed to start : " , err)
+		return
 	}
-	path := os.Getenv("GOPATH")+"\\src\\github.com\\user\\price"
-	http.Handle("/", http.FileServer(http.Dir(path+"\\public")))
-	http.HandleFunc("/GetData", makeHandler(queryengine.GetData))
-	log.Println("Server started: http://localhost:" + port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	if conf.Port == "" {
+		conf.Port = "3001"
+	}
+
+	http.Handle("/", http.FileServer(http.Dir(conf.PublicFolderPath)))
+	http.HandleFunc("/GetData", makeHandler(queryengine.GetData, conf.DataFilePath))
+	log.Println("Server started: http://localhost:" + conf.Port)
+	log.Fatal(http.ListenAndServe(":"+conf.Port, nil))
 }

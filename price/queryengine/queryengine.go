@@ -1,37 +1,42 @@
 package queryengine
+
 import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
     "github.com/user/price/structs"
 )
 
-func logRequestData(r *http.Request, title string) {
+func logRequestData(r *http.Request) {
 	log.Println("--------------------------------------------------")
 	log.Println("Request headers :", r.Header)
 	log.Println("Request body :", r.Body)
-	log.Println("Request title :", title)
 	log.Println("Request parameters", r.Form)
 	log.Println("--------------------------------------------------")
 }
 
-func GetData(w http.ResponseWriter, r *http.Request, title string) {
-	r.ParseForm()
-
-	logRequestData(r, title)
-	path := os.Getenv("GOPATH")+"\\src\\github.com\\user\\price"
-
-	body, err := ioutil.ReadFile(path+"\\data.json")
+func ReadJson(path string, i interface{}) (error) {
+	body, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		log.Println(">>> Oops, Error in GetData", err)
+		log.Println(">>> ReadJson: Error: ", err)
+		return err
 	}
+
+	err = json.Unmarshal([]byte(body), i)
+	
+	return err
+}
+
+
+func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
+	r.ParseForm()
 
 	var v structs.Data
 
-	err = json.Unmarshal([]byte(body), &v)
+	err := ReadJson(data_file_path, &v)
+
 	if err != nil {
 		log.Println(">>> Something went wrong : ", err)
 	}
