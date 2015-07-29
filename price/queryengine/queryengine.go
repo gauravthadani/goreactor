@@ -33,6 +33,8 @@ func ReadJson(path string, i interface{}) (error) {
 func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
 	r.ParseForm()
 
+	logRequestData(r)
+
 	var v structs.Data
 
 	err := ReadJson(data_file_path, &v)
