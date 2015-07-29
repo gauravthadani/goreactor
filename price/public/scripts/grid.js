@@ -295,6 +295,6 @@ var Draw = function (column, value) {
 
 React.render(
 React.createElement(Table, {
-    url: "http://localhost:3001/GetData"
+    url: "/GetData"
 }),
 document.getElementById("grid"));
