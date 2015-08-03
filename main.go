@@ -1,13 +1,10 @@
 package main
 
 import (
+	"github.com/user/goreactor/queryengine"
 	"log"
 	"net/http"
-	"os"
-    "github.com/user/price/queryengine"
 )
-
-
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request, string), data_file_path string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -15,20 +12,19 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string), data_file_
 	}
 }
 
-type AppConfig struct{
-	Port string `json:"port"`
+type AppConfig struct {
+	Port             string `json:"port"`
 	PublicFolderPath string `json:"public_folder_path"`
-	DataFilePath string `json:"data_file_path"`
+	DataFilePath     string `json:"data_file_path"`
 }
 
 func main() {
-	config_path := os.Getenv("PRICE_CONFIG_FILE_PATH")
-	var conf AppConfig
 
-	err := queryengine.ReadJson(config_path, &conf)
-	
+	var conf AppConfig
+	err := queryengine.ReadJson("./config.json", &conf)
+
 	if err != nil {
-		log.Fatal(">>>> Main app failed to start : " , err)
+		log.Fatal(">>>> Main app failed to start : ", err)
 		return
 	}
 

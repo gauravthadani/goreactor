@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-    "github.com/user/price/structs"
+    "github.com/user/goreactor/structs"
 )
 
 func logRequestData(r *http.Request) {
