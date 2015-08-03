@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
-	message "github.com/goreactor/secondservice/price_messages"
+	"github.com/goreactor/messages"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -26,7 +26,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 	}
 	//log.Println("Read ", len(data), " bytes of data from body")
 
-	requestData := &message.GetPriceRequest{}
+	requestData := &messages.GetPriceRequest{}
 	err = proto.Unmarshal(data, requestData)
 
 	if err != nil {

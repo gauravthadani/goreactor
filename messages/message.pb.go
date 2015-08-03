@@ -12,7 +12,7 @@ It has these top-level messages:
 	GetPriceRequest
 	GetPriceResponse
 */
-package price_messages
+package messages
 
 import proto "github.com/golang/protobuf/proto"
 import math "math"

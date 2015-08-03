@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/golang/protobuf/proto"
-	message "github.com/goreactor/price/price_messages"
+	"github.com/goreactor/messages"
 	"github.com/goreactor/price/structs"
 	"io/ioutil"
 	"log"
@@ -47,6 +47,7 @@ func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
 
 	for _, item := range v.Items {
 		log.Println(item)
+
 	}
 
 	direction, ok := r.Form["direction"]
@@ -69,7 +70,7 @@ func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
 	requestId := "MyRequestId"
 	requestName := "MyRequestName"
 
-	data, err := proto.Marshal(&message.GetPriceRequest{Id: &requestId, Name: &requestName})
+	data, err := proto.Marshal(&messages.GetPriceRequest{Id: &requestId, Name: &requestName})
 
 	if err != nil {
 		log.Println(">>>>> main: Thoo, stuppid.", err)
