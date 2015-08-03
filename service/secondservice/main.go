@@ -3,17 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
-	"github.com/goreactor/messages"
+	"github.com/goreactor/service/messages"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
-
-type AppConfig struct {
-	Port             string `json:"port"`
-	PublicFolderPath string `json:"public_folder_path"`
-	DataFilePath     string `json:"data_file_path"`
-}
 
 func GetData(w http.ResponseWriter, r *http.Request) {
 
