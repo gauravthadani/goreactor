@@ -4,7 +4,6 @@ import (
 	"sort"
 )
 
-
 type Item struct {
 	Name     string
 	Num      int
@@ -101,6 +100,3 @@ func OrderBy(name string, isAscending bool) *CompareBy {
 	c.IsAscending = isAscending
 	return &c
 }
-
-
-

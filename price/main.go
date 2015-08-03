@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/user/goreactor/queryengine"
+	"github.com/goreactor/price/queryengine"
 	"log"
 	"net/http"
 )
