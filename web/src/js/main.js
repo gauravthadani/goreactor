@@ -1,4 +1,5 @@
-var App = require('./components/app')
+var Table = require('./components/table');
 var React = require('react');
+//var Table = require('./components/table');
 
-React.render(<App/>,document.getElementById('main'));
+React.render( React.createElement(Table),document.getElementById('grid'));

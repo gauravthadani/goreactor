@@ -10,5 +10,5 @@ var Actions = {
 			text: data			
 		})
 	}
-}
+};
 module.exports = Actions;
