@@ -1,5 +1,6 @@
-price/price
+service/price/price
 *.exe
 *.a
-
+web/node_modules
+web/dist
 
