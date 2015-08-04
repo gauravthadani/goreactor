@@ -31,7 +31,7 @@ func main() {
 	if conf.Port == "" {
 		conf.Port = "3001"
 	}
-	log.Println(http.Dir(conf.PublicFolderPath))
+	
 	http.Handle("/", http.FileServer(http.Dir(conf.PublicFolderPath)))
 	http.HandleFunc("/GetData", makeHandler(queryengine.GetData, conf.DataFilePath))
 	log.Println("Server started: http://localhost:" + conf.Port)
