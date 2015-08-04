@@ -1,0 +1,4 @@
+{
+	"port": "3002",
+	"data_file_path": "./data.json"
+}

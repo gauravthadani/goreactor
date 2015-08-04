@@ -1,5 +1,0 @@
-{
-	"port": "80",
-	"public_folder_path": "/data/public",
-	"data_file_path": "/data/data.json"
-}
