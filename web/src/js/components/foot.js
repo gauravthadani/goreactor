@@ -60,3 +60,5 @@ var Foot = React.createClass({
         }, "Page ", this.props.data.paginate.page, " of ", this.props.data.paginate.pages))))));
     }
 });
+
+module.exports = Foot;

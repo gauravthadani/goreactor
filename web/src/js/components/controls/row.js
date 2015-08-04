@@ -17,3 +17,6 @@ var Row = React.createClass({
         })));
     }
 });
+
+
+module.exports = Row;

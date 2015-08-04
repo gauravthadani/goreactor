@@ -9,3 +9,4 @@ var Option = React.createClass({
         }, this.props.value));
     }
 });
+module.exports = Option;

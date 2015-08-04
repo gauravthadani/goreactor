@@ -26,8 +26,4 @@ var Draw = function (column, value) {
 };
 
 
-
-
-
-
-
+module.exports = Cell;

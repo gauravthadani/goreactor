@@ -33,3 +33,5 @@ var HeadCell = React.createClass({
         }, this.props.column.label)));
     }
 });
+
+module.exports = Head;

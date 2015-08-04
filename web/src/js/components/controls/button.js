@@ -11,3 +11,6 @@ var Button = React.createClass({
         }, this.props.text));
     }
 });
+
+
+module.exports = Button;
