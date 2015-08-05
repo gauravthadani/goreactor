@@ -1,4 +1,5 @@
 service/price/price
+service/queryengine/queryengine
 *.exe
 *.a
 web/node_modules
