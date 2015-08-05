@@ -1,10 +1,10 @@
 package main
 
-import (
-	
+import (	
 	"log"
 	"net/http"
 	"github.com/goreactor/service/common"
+	"io/ioutil"
 )
 
 
@@ -33,6 +33,30 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+conf.Port, nil))
 }
 
-func GetData(w http.ResponseWriter, r *http.Request) {
-	http.NewRequest("POST", "http://queryengine/GetData", nil)
+func GetData(w http.ResponseWriter, r *http.Request) {	
+	log.Println("Calling queryengine with ", r.URL.RawQuery)
+	resp, err := http.Get("http://queryengine/GetData?"+r.URL.RawQuery)
+	if err != nil {
+		HandleHttpError(err, w)
+		return
 	}
+	
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		HandleHttpError(err, w)
+		return
+	}
+
+	_, err = w.Write(data)
+	if err != nil {
+		HandleHttpError(err, w)
+	}
+
+	return
+}
+
+func HandleHttpError(err error, w http.ResponseWriter) {
+	message := "Error :" + err.Error()
+	log.Fatal(message)
+	http.Error(w, message, 500)
+}

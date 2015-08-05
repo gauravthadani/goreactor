@@ -3,4 +3,6 @@ service/price/price
 *.a
 web/node_modules
 web/dist
+service/price/web/node_modules
+service/price/web/dist
 

@@ -14,7 +14,11 @@ buildServiceImage() {
 		echo "Compiling price app" 
 		echo "Present directory :${PWD}"
 		cd service/${servicename}
-		go build		
+		go build
+		if [ $? -ne 0 ]; then
+			echo "Build of ${servicename} failed"
+			exit
+		fi	
 		echo "Done"
 		echo "Present directory :${PWD}"
 	#fi
@@ -22,7 +26,14 @@ buildServiceImage() {
 	#if [ -f service/${serivicename}/${serivicename} ]; then
 		echo "Building docker image"
 		imageName=${servicename}_image
-		echo ${imageName}
+
+		echo "Killing any running container"
+		docker rm -f ${servicename}
+		rm -f /opt/docker/dnsmasq.d/0host_${servicename}
+	
+		echo "Remove existing image"
+		docker rmi -f ${imageName}
+
 		docker build --force-rm=true -t ${imageName} .	
 		echo "Done"
 	#fi	
@@ -40,13 +51,7 @@ runService () {
 		exit
 	fi
 	
-		
 	container=${servicename}
-
-	echo "Killing any running container"
-	docker rm -f ${container}
-
-	
 
 	echo "Running ${servicename}"
 	docker run -d -h ${container} --name ${container} $imageName

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bytes"
+	//"bytes"
 	"encoding/json"
-	"github.com/golang/protobuf/proto"
-	"github.com/goreactor/service/messages"
+	//"github.com/golang/protobuf/proto"
+	//"github.com/goreactor/service/messages"
 	"github.com/goreactor/service/common"
 	"github.com/goreactor/service/queryengine/structs"
 	"log"
@@ -42,11 +42,15 @@ func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
 	if ok {
 		log.Println(">>> Sort direction", direction[0])
 		log.Println(">>> Sort column", column_name[0])
+		log.Println("UnMarshalled json data: ",v)
+	} else {
+		log.Println(r.Form)
 	}
+
 	v.Paginate.Direction = direction[0]
 	v.Paginate.ColName = column_name[0]
 
-	structs.OrderBy(column_name[0], direction[0] == "asc").Sort(v.Items)
+	structs.OrderBy(v.Paginate.ColName, v.Paginate.Direction == "asc").Sort(v.Items)
 
 	newBody, err := json.Marshal(v)
 	if err != nil {
@@ -54,19 +58,4 @@ func GetData(w http.ResponseWriter, r *http.Request, data_file_path string) {
 	}
 
 	w.Write(newBody)
-	requestId := "MyRequestId"
-	requestName := "MyRequestName"
-
-	data, err := proto.Marshal(&messages.GetPriceRequest{Id: &requestId, Name: &requestName})
-
-	if err != nil {
-		log.Println(">>>>> main: Thoo, stuppid.", err)
-	}
-	log.Println(">>>>> main: Before sending to secondservice")
-	var sendingData = bytes.NewReader(data)
-	log.Println(sendingData)
-	resp, err := http.Post("http://localhost:3002/GetDataProtoBuf", "application/octet-stream", sendingData)
-	log.Println(">>>> main : Reponse : ", resp)
-	log.Println(">>>> main : Error : ", err)
-	log.Println(">>>>> main: After sending to secondservice")
 }

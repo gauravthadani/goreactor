@@ -19,7 +19,7 @@ func main() {
 	err := common.ReadJson("./config.json", &conf)
 
 	if err != nil {
-		log.Fatal(">>>> Main app failed to start : ", err)
+		log.Fatal(">>>> QueryEngine app failed to start : ", err)
 		return
 	}
 
@@ -27,6 +27,7 @@ func main() {
 		conf.Port = "3002"
 	}
 	http.HandleFunc("/GetData", makeHandler(GetData,conf.DataFilePath))
+	log.Println("DataFilePath", conf.DataFilePath)
 	log.Fatal(http.ListenAndServe(":"+conf.Port, nil))
 }
 
