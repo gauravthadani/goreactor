@@ -23,9 +23,10 @@ buildServiceImage() {
 		echo "Building docker image"
 		imageName=${servicename}_image
 		echo ${imageName}
-		docker build -t ${imageName} .	
+		docker build --force-rm=true -t ${imageName} .	
 		echo "Done"
 	#fi	
+	cd ../..
 }
 
 runService () {
@@ -48,10 +49,11 @@ runService () {
 	
 
 	echo "Running ${servicename}"
-	docker run -d --dns 172.17.42.1 -h ${container} --name ${container} $imageName
+	docker run -d -h ${container} --name ${container} $imageName
 
 	echo "Updating dns"
 	new_ip=$(docker inspect ${container} | grep IPAddress | cut -f4 -d'"')
+	echo "IP of ${container} is ${new_ip}"
 	sudo container=$conatiner,new_ip=${new_ip}  echo "host-record=${container},${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
 	sudo service dnsmasq restart
 	echo "Done"

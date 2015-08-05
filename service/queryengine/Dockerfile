@@ -1,11 +1,13 @@
 FROM centos:6
 
-RUN mkdir -p /data/public
+RUN mkdir /data
 
-COPY price /price
+COPY queryengine /queryengine
+COPY data.json /data/data.json
+COPY config.json.container /config.json
 
 VOLUME /data
 
 EXPOSE 80
 
-CMD /price
+CMD /queryengine
