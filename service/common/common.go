@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
 	"log"
 )
 
@@ -18,4 +19,10 @@ func ReadJson(path string, i interface{}) error {
 	err = json.Unmarshal([]byte(body), i)
 
 	return err
+}
+
+func MakeHandler(fn func(http.ResponseWriter, *http.Request, string), d string) http.HandlerFunc {
+       return func(w http.ResponseWriter, r *http.Request) {
+               fn(w, r, d)
+       }
 }

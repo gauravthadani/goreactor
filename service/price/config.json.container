@@ -1,4 +1,5 @@
 {
 	"port": "80",
-	"public_folder_path": "/data/public"	
+	"public_folder_path": "/data/public",
+	"queryengine_url":"http://queryengine"		
 }

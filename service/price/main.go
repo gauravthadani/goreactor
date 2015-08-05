@@ -11,6 +11,7 @@ import (
 type AppConfig struct {
 	Port             string `json:"port"`
 	PublicFolderPath string `json:"public_folder_path"`	
+	QueryEngineUrl string `json:"queryengine_url"`	
 }
 
 func main() {
@@ -28,14 +29,14 @@ func main() {
 	}
 	
 	http.Handle("/", http.FileServer(http.Dir(conf.PublicFolderPath)))
-	http.HandleFunc("/GetData", GetData)
+	http.HandleFunc("/GetData", common.MakeHandler(GetData, conf.QueryEngineUrl))
 	log.Println("Server started: http://localhost:" + conf.Port)
 	log.Fatal(http.ListenAndServe(":"+conf.Port, nil))
 }
 
-func GetData(w http.ResponseWriter, r *http.Request) {	
+func GetData(w http.ResponseWriter, r *http.Request, queryEngineUrl string ) {	
 	log.Println("Calling queryengine with ", r.URL.RawQuery)
-	resp, err := http.Get("http://queryengine/GetData?"+r.URL.RawQuery)
+	resp, err := http.Get(queryEngineUrl+"/GetData?"+r.URL.RawQuery)
 	if err != nil {
 		HandleHttpError(err, w)
 		return

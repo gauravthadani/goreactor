@@ -26,15 +26,11 @@ func main() {
 	if conf.Port == "" {
 		conf.Port = "3002"
 	}
-	http.HandleFunc("/GetData", makeHandler(GetData,conf.DataFilePath))
+	http.HandleFunc("/GetData", common.MakeHandler(GetData,conf.DataFilePath))
 	log.Println("DataFilePath", conf.DataFilePath)
 	log.Fatal(http.ListenAndServe(":"+conf.Port, nil))
 }
 
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string), data_file_path string) http.HandlerFunc {
-       return func(w http.ResponseWriter, r *http.Request) {
-               fn(w, r, data_file_path)
-       }
-}
+
 
 
