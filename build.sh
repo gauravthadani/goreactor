@@ -11,8 +11,8 @@ buildServiceImage() {
 	fi
 
 	#if [ ! -f service/${servicename}/${servicename} ]; then
-		echo "Compiling price app" 
-		echo "Present directory :${PWD}"
+		echo "Compiling ${servicename}"
+
 		cd service/${servicename}
 		go build
 		if [ $? -ne 0 ]; then
@@ -20,7 +20,6 @@ buildServiceImage() {
 			exit
 		fi	
 		echo "Done"
-		echo "Present directory :${PWD}"
 	#fi
 
 	#if [ -f service/${serivicename}/${serivicename} ]; then
@@ -61,16 +60,13 @@ runService () {
 	container=${servicename}
 
 	echo "Running ${servicename}"
-	docker run ${runOpts} -h ${container} --dns=172.17.42.1 ${options} --name ${container} $imageName
+	docker run ${runOpts} -h ${container} --dns=172.17.42.1 ${options} --dns-search="docker.docker" --name ${container} $imageName
 
 	echo "Updating dns"
-	new_ip=$(docker inspect ${container} | grep IPAddress | cut -f4 -d'"')
+	new_ip=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $servicename)
 	echo "IP of ${container} is ${new_ip}"
-	sudo container=$conatiner,new_ip=${new_ip}  echo "host-record=${container}.docker,${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
-	sudo service dnsmasq restart
+	sudo echo "host-record=${container}.docker.docker,${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
 	echo "Done"
-	
-	
 }
 
 
@@ -92,4 +88,8 @@ if [ $# -eq 0 ]; then
 		echo "Build and Run ${SERVICE}"
 		buildAndRun $SERVICE
 	done
+else
+	buildAndRun $1
 fi
+
+sudo service dnsmasq restart
