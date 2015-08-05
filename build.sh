@@ -42,8 +42,15 @@ buildServiceImage() {
 
 runService () {
 	servicename=$1
+	options=$2
+	daemonize=$3
 	imageName=${servicename}_image
-
+	
+	runOpts="-d"
+	if [ "${daemonize}" = "0" ]; then
+		runOpts="-i"
+	fi
+	
 	echo $imageName
 
 	if [ "$servicename" = "" ]; then
@@ -54,27 +61,35 @@ runService () {
 	container=${servicename}
 
 	echo "Running ${servicename}"
-	docker run -d -h ${container} --name ${container} $imageName
+	docker run ${runOpts} -h ${container} --dns=172.17.42.1 ${options} --name ${container} $imageName
 
 	echo "Updating dns"
 	new_ip=$(docker inspect ${container} | grep IPAddress | cut -f4 -d'"')
 	echo "IP of ${container} is ${new_ip}"
-	sudo container=$conatiner,new_ip=${new_ip}  echo "host-record=${container},${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
+	sudo container=$conatiner,new_ip=${new_ip}  echo "host-record=${container}.docker,${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
 	sudo service dnsmasq restart
 	echo "Done"
 	
-
 	
 }
 
-buildServiceImage "price" 
-buildServiceImage "queryengine" 
 
+buildAndRun() {
+	servicename=$1
+	if [ -a "$servicename" ]; then
+		echo "No Service specified. Exiting"
+		exit
+	fi
+	buildServiceImage ${servicename}
+	runService ${servicename}
+}
 
+declare -a services=('queryengine' 'price')
 
-if [ "$1" = "run" ]; then
-runService "price" 
-runService "queryengine" 
-
+if [ $# -eq 0 ]; then
+	for SERVICE in ${services[@]}
+	do
+		echo "Build and Run ${SERVICE}"
+		buildAndRun $SERVICE
+	done
 fi
-

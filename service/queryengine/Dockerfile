@@ -8,6 +8,7 @@ COPY config.json.container /config.json
 
 VOLUME /data
 
+
 EXPOSE 80
 
 CMD /queryengine
