@@ -2,6 +2,7 @@ var React = require('react');
 var Head = require('./head');
 var Body = require('./body');
 var Foot = require('./foot');
+var $ = require('jquery')
 
 
 var Table = React.createClass({
