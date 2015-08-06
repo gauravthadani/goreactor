@@ -65,7 +65,7 @@ runService () {
 	echo "Updating dns"
 	new_ip=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $servicename)
 	echo "IP of ${container} is ${new_ip}"
-	sudo echo "host-record=${container}.docker.docker,${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
+	echo "host-record=${container}.docker.docker,${new_ip}" > /opt/docker/dnsmasq.d/0host_$container
 	echo "Done"
 }
 
