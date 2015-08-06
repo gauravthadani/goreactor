@@ -1,6 +1,6 @@
 var React = require('react');
 var AppStore = require('../stores/appstore')
-var AppActions = require('../actions/appactions')
+var ViewActions = require('../actions/viewactions')
 
 
 function getTodoState() {
@@ -25,7 +25,7 @@ var App = React.createClass({
 	},
 
 	sendAction: function(){
-		AppActions.click('update');
+		ViewActions.click('update');
 	},
 
 

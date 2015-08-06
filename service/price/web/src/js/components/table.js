@@ -7,7 +7,7 @@ var $ = require('jquery')
 
 var Table = React.createClass({
     displayName: 'Table',
-    loadData: function () {
+    loadData: function() {
         console.log('going to send the request');
         $.ajax({
 
@@ -18,24 +18,24 @@ var Table = React.createClass({
                 col_name: this.state.data.paginate.col_name,
                 direction: this.state.data.paginate.direction
             },
-            contentType : "application/json",
-            dataType: "json",            
-            success: function (data) {
+            contentType: "application/json",
+            dataType: "json",
+            success: function(data) {
                 console.log('received some data');
-                this.setState({ 
+                this.setState({
                     paginate: data.paginate
                 });
                 this.setState({
                     data: data
                 });
             }.bind(this),
-            error: function (xhr, status, err) {
+            error: function(xhr, status, err) {
                 console.log('in error block');
                 console.log(this.props.url, status, err.toString());
             }.bind(this)
         });
     },
-    getInitialState: function () {
+    getInitialState: function() {
         return {
             data: {
                 columns: [],
@@ -52,10 +52,10 @@ var Table = React.createClass({
             }
         };
     },
-    componentDidMount: function () {
+    componentDidMount: function() {
         this.loadData();
     },
-    getFirst: function () {
+    getFirst: function() {
         this.setState({
             paginate: $.extend(this.state.paginate, {
                 page: 1
@@ -63,7 +63,7 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    getPrev: function () {
+    getPrev: function() {
         this.setState({
             paginate: $.extend(this.state.paginate, {
                 page: this.state.paginate.page - 1
@@ -71,7 +71,7 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    getNext: function () {
+    getNext: function() {
         this.setState({
             paginate: $.extend(this.state.paginate, {
                 page: this.state.paginate.page + 1
@@ -79,7 +79,7 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    getLast: function () {
+    getLast: function() {
         this.setState({
             paginate: $.extend(this.state.paginate, {
                 page: this.state.paginate.pages
@@ -87,7 +87,7 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    changeRowCount: function (e) {
+    changeRowCount: function(e) {
         var el = e.target;
         this.setState({
             paginate: $.extend(this.state.paginate, {
@@ -96,7 +96,7 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    sortData: function (e) {
+    sortData: function(e) {
 
         e.preventDefault();
         var el = e.target;
@@ -110,29 +110,29 @@ var Table = React.createClass({
         });
         this.loadData.call(this);
     },
-    render: function () {
+    render: function() {
 
         var that = this;
         return (
             React.createElement("table", {
-                className: "r-table"
-            },
-            React.createElement(Head, {
-                data: that.state.data,
-                onSort: that.sortData
-            }),
-            React.createElement(Body, {
-                data: this.state.data
-            }),
-            React.createElement(Foot, {
-                data: this.state.data,
-                onFirst: this.getFirst,
-                onPrev: this.getPrev,
-                onNext: this.getNext,
-                onLast: this.getLast,
-                onChange: this.changeRowCount,
-                onRefresh: this.loadData
-            })));
+                    className: "r-table"
+                },
+                React.createElement(Head, {
+                    data: that.state.data,
+                    onSort: that.sortData
+                }),
+                React.createElement(Body, {
+                    data: this.state.data
+                }),
+                React.createElement(Foot, {
+                    data: this.state.data,
+                    onFirst: this.getFirst,
+                    onPrev: this.getPrev,
+                    onNext: this.getNext,
+                    onLast: this.getLast,
+                    onChange: this.changeRowCount,
+                    onRefresh: this.loadData
+                })));
     }
 });
 

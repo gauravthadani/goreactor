@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "jquery": "*"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/jest"
+  }
+}
