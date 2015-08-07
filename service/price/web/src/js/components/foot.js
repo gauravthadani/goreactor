@@ -1,6 +1,8 @@
 var React = require('react');
 var Button = require('./controls/button');
 var Option = require('./controls/option');
+var DataStore = require('../stores/datastore')
+var ViewActions = require('../actions/viewactions')
 
 var Foot = React.createClass({
     displayName: 'Foot',
@@ -16,22 +18,22 @@ var Foot = React.createClass({
                             },
                             React.createElement(Button, {
                                 text: "<< First",
-                                onClick: this.props.onFirst,
+                                onClick: getFirst,
                                 disabled: this.props.data.paginate.page === 1
                             }),
                             React.createElement(Button, {
                                 text: "< Prev",
-                                onClick: this.props.onPrev,
+                                onClick: getPrev,
                                 disabled: this.props.data.paginate.page === 1
                             }),
                             React.createElement(Button, {
                                 text: "Next >",
-                                onClick: this.props.onNext,
+                                onClick: getNext,
                                 disabled: this.props.data.paginate.page === this.props.data.paginate.pages
                             }),
                             React.createElement(Button, {
                                 text: "Last >>",
-                                onClick: this.props.onLast,
+                                onClick: getLast,
                                 disabled: this.props.data.paginate.page === this.props.data.paginate.pages
                             }),
                             React.createElement(Button, {
@@ -60,5 +62,42 @@ var Foot = React.createClass({
                             }, "Page ", this.props.data.paginate.page, " of ", this.props.data.paginate.pages))))));
     }
 });
+
+
+function getFirst() {
+    var criteria = DataStore.getPaginateData();
+    criteria.page = 1;
+    ViewActions.load(criteria);
+};
+
+function getPrev() {
+    var criteria = DataStore.getPaginateData();
+    criteria.page--;
+    ViewActions.load(criteria);
+};
+
+function getNext() {
+
+    var criteria = DataStore.getPaginateData();
+    criteria.page++;
+    ViewActions.load(criteria);
+};
+
+function getLast() {
+
+    var criteria = DataStore.getPaginateData();
+    criteria.page = criteria.pages;
+    ViewActions.load(criteria);
+
+};
+
+function changeRowCount(e) {
+    var el = e.target;
+    var criteria = DataStore.getPaginateData();
+    criteria.row_count = el.options[el.selectedIndex].value;
+    ViewActions.load(criteria);
+};
+
+
 
 module.exports = Foot;

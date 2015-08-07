@@ -34,62 +34,8 @@ var Table = React.createClass({
     componentDidUnMount: function() {
         DataStore.removeChangeListener(this._onChange);
     },
-    getFirst: function() {
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                page: 1
-            })
-        });
-        ViewActions.load(this.state.data.paginate);
-    },
-    getPrev: function() {
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                page: this.state.data.paginate.page - 1
-            })
-        });
-        ViewActions.load(this.state.data.paginate);
-    },
-    getNext: function() {
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                page: this.state.data.paginate.page + 1
-            })
-        });
-        ViewActions.load(this.state.data.paginate);
-    },
-    getLast: function() {
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                page: this.state.data.paginate.pages
-            })
-        });
-        ViewActions.load(this.state.data.paginate);
-    },
-    changeRowCount: function(e) {
-        var el = e.target;
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                row_count: el.options[el.selectedIndex].value
-            })
-        });
-        ViewActions.load(this.state.data.paginate);
-    },
-    sortData: function(e) {
+    
 
-        e.preventDefault();
-
-        var el = e.target;
-        col_name = el.getAttribute("data-column");
-        direction = el.getAttribute("data-direction");
-        this.setState({
-            paginate: $.extend(this.state.data.paginate, {
-                col_name: col_name,
-                direction: direction
-            })
-        }); 
-        ViewActions.load(this.state.data.paginate);
-    },
     render: function() {
 
         return (
@@ -98,16 +44,13 @@ var Table = React.createClass({
                 },
                 React.createElement(Head, {
                     data: this.state.data,
-                    onSort: this.sortData
                 }),
                 React.createElement(Body, {
                     data: this.state.data
                 }),
                 React.createElement(Foot, {
-                    data: this.state.data,
-                    onFirst: this.getFirst,
-                    onPrev: this.getPrev,
-                    onNext: this.getNext,
+                    data: this.state.data,                    
+                    onPrev: this.getPrev,                    
                     onLast: this.getLast,
                     onChange: this.changeRowCount,
                     onRefresh: this.loadData
@@ -116,7 +59,7 @@ var Table = React.createClass({
 
     _onChange: function() {
         this.setState({
-            data: DataStore.getData().data
+            data: DataStore.getData()
         });
     }
 });

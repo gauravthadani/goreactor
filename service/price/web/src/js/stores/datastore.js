@@ -11,11 +11,8 @@ var data = {};
 
 
 function _getData() {
-  return {
-    data
-  };
+  return data;
 }
-
 
 
 var DataStore = assign({}, EventEmitter.prototype, {
@@ -34,6 +31,10 @@ var DataStore = assign({}, EventEmitter.prototype, {
 
   getData: function() {
     return _getData()
+  },
+
+  getPaginateData: function() {
+    return _getData().paginate;
   },
 
   dispatcherIndex: AppDispatcher.register(function(payload) {
