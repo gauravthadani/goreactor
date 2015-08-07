@@ -13,11 +13,12 @@ var Actions = {
 		})
 	},
 
-	sort: function(criteria) {
-		AjaxApi.invoke('/GetData', this.props.data.paginate, ServerActions.receiveData, ServerActions.onError);
+	load: function(criteria) {
+		console.log('View Actions : load : ')
+		AjaxApi.invoke('/GetData', criteria, ServerActions.receiveData, ServerActions.onError);
 		AppDispatcher.handleAction({
 			actionType: AppConstants.DATA_REQUESTED,
-			criteria: criertia
+			criteria: criteria
 		})
 	}
 };

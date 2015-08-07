@@ -5,7 +5,7 @@ var ServerActions = {
 
 	receiveData : function(data){
 		console.log('ServerAction : receiveData : sending to dispatcher');
-		AppDispatcher.handelAction({
+		AppDispatcher.handleAction({
 			actionType: AppConstants.RECEIVE_DATA_API,
 			data: data			
 		})

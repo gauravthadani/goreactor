@@ -7,7 +7,7 @@ var Head = React.createClass({
         return (
             React.createElement("thead", null,
                 React.createElement("tr", null,
-                    this.props.data.columns.map(function (column, i) {
+                    that.props.data.columns.map(function (column, i) {
                         return React.createElement(HeadCell, {
                             key: i,
                             column: column,
@@ -30,7 +30,7 @@ var HeadCell = React.createClass({
                 'data-direction': this.props.direction === "desc" ? "asc" : "desc",
                 role: "button",
                 tabIndex: "0",
-                onClick: this.props.onSort
+            onClick: this.props.onSort
             }, this.props.column.label)));
     }
 });

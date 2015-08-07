@@ -2,39 +2,14 @@ var React = require('react');
 var Head = require('./head');
 var Body = require('./body');
 var Foot = require('./foot');
-var $ = require('jquery')
+var $ = require('jquery');
+var DataStore = require('../stores/datastore')
+var ViewActions = require('../actions/viewactions')
 
 
 var Table = React.createClass({
     displayName: 'Table',
-    loadData: function() {
-        console.log('going to send the request');
-        $.ajax({
 
-            url: "/GetData",
-            data: {
-                page: this.state.data.paginate.page,
-                row_count: this.state.data.paginate.row_count,
-                col_name: this.state.data.paginate.col_name,
-                direction: this.state.data.paginate.direction
-            },
-            contentType: "application/json",
-            dataType: "json",
-            success: function(data) {
-                console.log('received some data');
-                this.setState({
-                    paginate: data.paginate
-                });
-                this.setState({
-                    data: data
-                });
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.log('in error block');
-                console.log(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-    },
     getInitialState: function() {
         return {
             data: {
@@ -53,62 +28,67 @@ var Table = React.createClass({
         };
     },
     componentDidMount: function() {
-        this.loadData();
+        ViewActions.load(this.state.data.paginate);
+        DataStore.addChangeListener(this._onChange);
+    },
+    componentDidUnMount: function() {
+        DataStore.removeChangeListener(this._onChange);
     },
     getFirst: function() {
         this.setState({
-            paginate: $.extend(this.state.paginate, {
+            paginate: $.extend(this.state.data.paginate, {
                 page: 1
             })
         });
-        this.loadData.call(this);
+        ViewActions.load(this.state.data.paginate);
     },
     getPrev: function() {
         this.setState({
-            paginate: $.extend(this.state.paginate, {
-                page: this.state.paginate.page - 1
+            paginate: $.extend(this.state.data.paginate, {
+                page: this.state.data.paginate.page - 1
             })
         });
-        this.loadData.call(this);
+        ViewActions.load(this.state.data.paginate);
     },
     getNext: function() {
         this.setState({
-            paginate: $.extend(this.state.paginate, {
-                page: this.state.paginate.page + 1
+            paginate: $.extend(this.state.data.paginate, {
+                page: this.state.data.paginate.page + 1
             })
         });
-        this.loadData.call(this);
+        ViewActions.load(this.state.data.paginate);
     },
     getLast: function() {
         this.setState({
-            paginate: $.extend(this.state.paginate, {
-                page: this.state.paginate.pages
+            paginate: $.extend(this.state.data.paginate, {
+                page: this.state.data.paginate.pages
             })
         });
-        this.loadData.call(this);
+        ViewActions.load(this.state.data.paginate);
     },
     changeRowCount: function(e) {
         var el = e.target;
         this.setState({
-            paginate: $.extend(this.state.paginate, {
+            paginate: $.extend(this.state.data.paginate, {
                 row_count: el.options[el.selectedIndex].value
             })
         });
-        this.loadData.call(this);
+        ViewActions.load(this.state.data.paginate);
     },
     sortData: function(e) {
 
         e.preventDefault();
+
         var el = e.target;
         col_name = el.getAttribute("data-column");
         direction = el.getAttribute("data-direction");
         this.setState({
-            paginate: $.extend(this.state.paginate, {
+            paginate: $.extend(this.state.data.paginate, {
                 col_name: col_name,
                 direction: direction
             })
-        });
-        this.loadData.call(this);
+        }); 
+        ViewActions.load(this.state.data.paginate);
     },
     render: function() {
 
@@ -132,6 +112,12 @@ var Table = React.createClass({
                     onChange: this.changeRowCount,
                     onRefresh: this.loadData
                 })));
+    },
+
+    _onChange: function() {
+        this.setState({
+            data: DataStore.getData().data
+        });
     }
 });
 
