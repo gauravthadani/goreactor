@@ -38,7 +38,7 @@ var Foot = React.createClass({
                             }),
                             React.createElement(Button, {
                                 text: "Refresh",
-                                onClick: this.props.onRefresh,
+                                onClick: refresh,
                                 disabled: false
                             })),
                         React.createElement("div", {
@@ -98,6 +98,8 @@ function changeRowCount(e) {
     ViewActions.load(criteria);
 };
 
-
+function refresh() {
+    ViewActions.load(DataStore.getPaginateData());
+};
 
 module.exports = Foot;

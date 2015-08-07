@@ -49,11 +49,7 @@ var Table = React.createClass({
                     data: this.state.data
                 }),
                 React.createElement(Foot, {
-                    data: this.state.data,                    
-                    onPrev: this.getPrev,                    
-                    onLast: this.getLast,
-                    onChange: this.changeRowCount,
-                    onRefresh: this.loadData
+                    data: this.state.data                    
                 })));
     },
 
