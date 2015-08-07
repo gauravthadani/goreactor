@@ -112,14 +112,13 @@ var Table = React.createClass({
     },
     render: function() {
 
-        var that = this;
         return (
             React.createElement("table", {
                     className: "r-table"
                 },
                 React.createElement(Head, {
-                    data: that.state.data,
-                    onSort: that.sortData
+                    data: this.state.data,
+                    onSort: this.sortData
                 }),
                 React.createElement(Body, {
                     data: this.state.data

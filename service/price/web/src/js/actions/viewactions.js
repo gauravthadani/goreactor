@@ -1,25 +1,24 @@
-var AppDispatcher =require('../dispatcher/appdispatcher');
+var AppDispatcher = require('../dispatcher/appdispatcher');
 var AppConstants = require('../constants/appconstants');
+var AjaxApi = require('../serviceapis/ajaxapi')
+var ServerActions = require('./serveractions')
 
 var Actions = {
 
-	click : function(data){
+	click: function(data) {
 		console.log('Click Action');
 		AppDispatcher.handleAction({
 			actionType: AppConstants.TODO_VIEW,
-			text: data			
+			text: data
 		})
 	},
 
-	sort : function(col_name, direction){
-		console.log('Sort Action');
-		console.log(col_name);
-		console.log(direction);
+	sort: function(criteria) {
+		AjaxApi.invoke('/GetData', this.props.data.paginate, ServerActions.receiveData, ServerActions.onError);
 		AppDispatcher.handleAction({
-			actionType: AppConstants.SORT_ON_COLUMN,
-			col_name : col_name,
-			direction : direction
-		})	
+			actionType: AppConstants.DATA_REQUESTED,
+			criteria: criertia
+		})
 	}
 };
 module.exports = Actions;

@@ -6,15 +6,15 @@ var ServerActions = {
 	receiveData : function(data){
 		console.log('ServerAction : receiveData : sending to dispatcher');
 		AppDispatcher.handelAction({
-			actionType: AppConstants.RECEIVE_DATA,
+			actionType: AppConstants.RECEIVE_DATA_API,
 			data: data			
 		})
 	},
 
-	onError : function(err){
+	onError : function(xhr, status, err){
 		console.log('ServerAction : onError : sending to dispatcher');
 		AppDispatcher.handleAction({
-			actionType: AppConstants.RECEIVE_API_ERROR,
+			actionType: AppConstants.RECEIVE_ERROR_API,
 			err: err
 		});
 	}
